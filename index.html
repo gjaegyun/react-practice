@@ -7,72 +7,35 @@
     <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        function MinutesToHours() {
-            const [amount, setAmount] = React.useState(0);//첫번째는 value, 두번째는 component를 세로고침 할때 쓰는 function
-            const [flipped, setFlipped] = React.useState(false);
-            const onChange = (event) => {
-                setMinutes(event.target.value);
-            };
-            const reset = () => setMinutes(0);
-            const onFlip = () => {
-                reset();
-                setFlipped((current) => !current);
-            }; 
-            return(
-                <div>
-                    <div>
-                        <div>
-                            <label htmlfor="minutes">Minutes</label>
-                            <input
-                                value={flipped ? amount * 60 : amount}
-                                id="minutes"
-                                placeholder="Minutes"
-                                type="number"
-                                onChange = {onChange}
-                                disabled={flipped}
-                            />
-                        </div>
-                        <div>
-                            <label htmlfor="hours">Hours</label>
-                            <input
-                                value={flipped ? amount : Math.round(amount / 60)}
-                                id = "hours"
-                                placeholder="Hours"
-                                type="number"
-                                disabled={!flipped}
-                            />
-                        </div>
-                    </div>
-                    <button onClick={reset}>Reset</button>
-                    <button onClick={onFlip}>Flip</button>
-                </div>
+        function Btn({text, changeValue}) {
+            return (
+                <button 
+                    onClick={changeValue}
+                    style={{
+                        backgroundColor: "tomato",
+                        color:"white",
+                        padding:"10px 20px",
+                        border: 0,
+                        borderRadius : 10,
+                    }}
+                    >
+                    {banana}
+                </button>
             );
         }
-        function KmToMiles(){
-            return <h3>KM 2 M</h3>;
-        }
+        const MemorizedBtn = React.memo(Btn)
+
         function App() {
-            const[index, setIndex] = React.useState("0")
-            const onSelect =(event) => {
-                setIndex(event.target.value);
-            }
-            console.log("render w/", index);
-            return(
+            const [value, setValue] = React.useState("Save Changes")
+            const changeValue = () => setValue("Revert Changes"); 
+            return (
                 <div>
-                    <h1>Super Converter</h1>
-                    <select value={index} onChange={onSelect}>
-                        <option value="xx">Select your units</option>
-                        <option value="0">Minutes & Hours</option>
-                        <option calue="1">Km & Miles</option>
-                    </select>
-                    <hr />
-                    {index ==="xx" ? "Please select your units" : null}
-                    {index === "0" ? <MinutesToHours/> : null}
-                    {index === "1" ? <KmToMiles/> : null}
+                    <MemorizedBtn text={value} changeValue={changeValue}/>
+                    <MemorizedBtn text="Continue"/>
                 </div>
             );
         }
-    const root = document.getElementById("root");
-    ReactDom.render(<App />, root);
+        const root = document.getElementById("root");
+        ReactDom.render(<App />, root);
     </script>
 </html>
